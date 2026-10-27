@@ -11,9 +11,10 @@ How Loupe hooks into Grasshopper. Plan and status: `phases.md` /
         └─ LoupeLoader (GH_AssemblyPriority)
              └─ RhinoApp.Idle until Instances.DocumentEditor exists
                   └─ ToolbarButton: find the canvas ToolStrip, add button
-                       └─ click ─▶ LoupeWindow (Form, owned by the editor)
+                       └─ click ─▶ LoupePanel (over the main canvas, same parent)
+                                     ├─ lock, home
                                      └─ GH_Canvas, Document = active document
-                                        own Viewport (zoom / pan)
+                                        own Viewport, no widgets
 
  GH_Document (shared): objects, wires, selection, solutions
    ├─ main canvas (Instances.ActiveCanvas)
@@ -29,11 +30,13 @@ How Loupe hooks into Grasshopper. Plan and status: `phases.md` /
    changes, the lowest `ToolStrip` above the main canvas. Hidden when
    View → Canvas Toolbar is off.
 3. **Button:** a `ToolStripButton` with icon and tooltip on that strip.
-4. **Second canvas:** a new `GH_Canvas`, `Document` = active document, in a
-   resizable `Form` owned by the editor. Each canvas has its own `Viewport`.
+4. **Second canvas:** a new `GH_Canvas`, `Document` = active document,
+   inside `LoupePanel`, a framed control added next to the main canvas
+   and brought to the front (ADR 0005). Each canvas has its own
+   `Viewport`.
 5. **Sync:** the document is shared; the Loupe canvas redraws whenever
    the main canvas paints, and follows `DocumentChanged` on the main canvas.
-6. **Clicks:** first opens, then hide / show (ADR 0002).
+6. **Clicks:** first opens, then hide / show (ADR 0005).
 7. **Cleanup:** on dispose, `Document = null` and unsubscribe everything.
 
 ## Known quirks
@@ -64,7 +67,7 @@ loupe/
     ├── LoupeLoader.cs    GH_AssemblyPriority entry point
     ├── UI/
     │   ├── ToolbarButton.cs   the only file touching editor internals
-    │   └── LoupeWindow.cs     form + second GH_Canvas
+    │   └── LoupePanel.cs      framed panel + second GH_Canvas, lock, home
     └── Resources/loupe_24.png
 ```
 

@@ -7,8 +7,9 @@ The build plan. Where Shrey is right now: `status/shrey.md`.
 Each confirmed item gets an ADR (`adr/_index.md`) and a one-line pointer here.
 
 - **Target:** Rhino 8 only, as the template sets it. (ADR 0001)
-- **Window:** first click opens it bottom-left; later clicks hide / show;
-  closing hides. (ADR 0002)
+- **Panel:** a framed panel on the canvas, lock and home top-left, no X;
+  first click opens it bottom-left, later clicks hide / show. (ADR 0005)
+- **Icon:** a grasshopper under a magnifier. (ADR 0006)
 - **Licence:** GPL-3.0. (ADR 0003)
 - **Name:** Loupe, free on food4Rhino, GitHub and the Package Manager.
   (ADR 0004)
@@ -42,8 +43,8 @@ Each phase is done when it works in Rhino 8 on Shrey's machine.
 
 ### 2. Window
 
-- Second canvas on the active document, bottom-left, resizable, toggle
-  (ADR 0002).
+- Second canvas on the active document, as a panel on the canvas with lock
+  and home, toggle (ADR 0005).
 
 ### 3. Sync and cleanup
 
@@ -58,10 +59,11 @@ Each phase is done when it works in Rhino 8 on Shrey's machine.
 
 | Feature | Status |
 |---|---|
-| Plugin loads | written, not checked in Rhino |
-| Toolbar button | written, not checked in Rhino |
-| Second canvas window | written, not checked in Rhino |
+| Plugin loads | works (v0.1.1-alpha) |
+| Toolbar button | works (v0.1.1-alpha) |
+| Second canvas window | works (v0.1.1-alpha) |
 | Hide / show toggle | written, not checked in Rhino |
+| Panel on the canvas: frame, lock, home, no widgets | written, not checked in Rhino |
 | Refresh on solve / changes | written, not checked in Rhino |
 | Follows active document | written, not checked in Rhino |
 | Cleanup on close | written, not checked in Rhino |

@@ -5,21 +5,19 @@ Plan: `phases.md`.
 
 ## Now
 
-- Notes, README, GPL-3.0 licence in place. ADRs 0001–0004 (Rhino 8 /
-  `net7.0-windows` only, window toggle, licence, name).
-- **Code written, not run in Rhino:** loader, toolbar button, Loupe window
-  with the second canvas, hide / show, redraw sync, document follow,
-  cleanup (`src/Loupe/`). Compiles against the Grasshopper 8 NuGet package
-  (checked on Linux with a net7.0 copy); the real `-windows` build only
-  runs on Windows or in CI.
+- v0.1.1-alpha works in Rhino 8: button, second canvas, zoom / pan,
+  document shared.
+- v0.2.0-alpha written, not yet tried: Loupe as a framed panel on the
+  canvas with lock and home, no X, no compass / Markov bar (ADR 0005), new
+  grasshopper icon (ADR 0006).
+- Releases: GitHub → Actions → build → Run workflow with a tag
+  (`setup.md` → Releasing).
 
 ## Next
 
-1. On Windows: `dotnet build`, load via `GrasshopperDeveloperSettings`,
-   restart Rhino. Check: button shows on the canvas toolbar, window opens
-   bottom-left, zoom / pan independent, toggle and X hide it, switching
-   files follows.
-2. Fix what doesn't work there (the toolbar search is the likeliest).
-3. Decide the git workflow; merge this branch into `main` (`phases.md` →
+1. Try v0.2.0-alpha: frame look, lock / unlock move and resize, home,
+   toggle, editor resize, high-DPI.
+2. Decide the git workflow; merge this branch into `main` (`phases.md` →
    Open).
+3. Menu item / shortcut, or a Rhino command (`.rhp`) — not decided.
 4. Claim the Package Manager name with a first release (ADR 0004).

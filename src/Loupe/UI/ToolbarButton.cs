@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Grasshopper.GUI;
+using Grasshopper.GUI.Canvas;
 using Rhino;
 
 namespace Loupe.UI
 {
   static class ToolbarButton
   {
-    static LoupeWindow window;
+    static LoupePanel panel;
 
     public static void Add(GH_DocumentEditor editor)
     {
@@ -30,22 +31,29 @@ namespace Loupe.UI
 
     static void Toggle(GH_DocumentEditor editor, ToolStripButton button)
     {
-      if (window == null || window.IsDisposed)
+      if (panel == null || panel.IsDisposed)
       {
-        window = new LoupeWindow(editor);
-        window.VisibleChanged += (s, e) => button.Checked = window.Visible;
-        window.Show(editor);
+        var main = MainCanvas(editor);
+        panel = new LoupePanel(main);
+        panel.VisibleChanged += (s, e) => button.Checked = panel.Visible;
+        main.Parent.Controls.Add(panel);
+        panel.Home();
+        panel.BringToFront();
+        button.Checked = true;
         return;
       }
-      window.Visible = !window.Visible;
+      panel.Visible = !panel.Visible;
+      if (panel.Visible) panel.BringToFront();
     }
+
+    static GH_Canvas MainCanvas(Control editor) => Descendants(editor).OfType<GH_Canvas>().First();
 
     static ToolStrip FindCanvasToolbar(Control editor) =>
       Descendants(editor).OfType<ToolStrip>().FirstOrDefault(t => t.Name == "CanvasToolbar") ?? ToolbarAboveCanvas(editor);
 
     static ToolStrip ToolbarAboveCanvas(Control editor)
     {
-      var canvas = Descendants(editor).OfType<Grasshopper.GUI.Canvas.GH_Canvas>().FirstOrDefault();
+      var canvas = Descendants(editor).OfType<GH_Canvas>().FirstOrDefault();
       if (canvas == null) return null;
       var canvasTop = TopIn(editor, canvas);
       return Descendants(editor)

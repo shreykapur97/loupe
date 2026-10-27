@@ -1,6 +1,6 @@
 # 0002 — The window opens once, bottom-left, then hides and shows
 
-Date: 2026-10-27 · Status: accepted · Decided by: shrey
+Date: 2026-10-27 · Status: superseded by 0005 · Decided by: shrey
 
 ## Context
 

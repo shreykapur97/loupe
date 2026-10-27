@@ -2,9 +2,10 @@
 
 A second canvas for Grasshopper. Loupe adds a button to the Grasshopper
 canvas toolbar (the strip with save, zoom, named views and preview modes).
-Clicking it opens a small, resizable window in the bottom-left with its own
-canvas on the same document, which you can zoom and pan separately, so you
-can look at two parts of one script at once. Click again to hide or show it.
+Clicking it opens a small framed panel in the bottom-left of the canvas
+with its own view of the same document, which you can zoom and pan
+separately, so you can look at two parts of one script at once. Click
+again to hide or show it.
 
 Named after the jeweller's magnifier.
 
@@ -28,10 +29,12 @@ To uninstall, delete `Loupe.gha` from that folder and restart Rhino.
 
 ## Use
 
-- Click the Loupe button on the canvas toolbar: the window opens bottom-left.
+- Click the Loupe button on the canvas toolbar: the panel opens bottom-left.
 - Zoom and pan in it as on the main canvas; selection and wires are shared.
-- Click the button again (or close the window) to hide it; click to bring it
-  back.
+- Lock (top-left): unlock to move the panel by its frame or resize it by a
+  corner; lock again to keep it there.
+- Home (top-left): back to the default size and place.
+- Click the toolbar button again to hide it; click to bring it back.
 
 The second canvas is meant for viewing and navigating. Some editing (wire
 dragging, the search popup, widgets) may not work in it.

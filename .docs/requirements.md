@@ -19,7 +19,7 @@ Marked **decided**, **assumed** (Claude's default, confirm or change), or
 - Zoom and pan in the Loupe window never move the main canvas, and the
   other way round. **Decided.**
 - Selection, wires and solutions show the same in both canvases. **Decided.**
-- The window follows the active document. **Decided.**
+- The panel follows the active document. **Decided.**
 - No setting or file is written to the user's machine. **Assumed.**
 
 ## Performance

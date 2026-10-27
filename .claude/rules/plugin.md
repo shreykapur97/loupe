@@ -13,11 +13,11 @@ paths:
 - `LoupeLoader.cs` — `GH_AssemblyPriority`; the editor doesn't exist at
   load, so it subscribes to the editor/canvas creation event and hands off
   there. Nothing else.
-- `UI/ToolbarButton.cs` — finds the canvas toolbar (the `ToolStrip` with
-  save, zoom, named views, preview modes) and inserts the button. The only
-  file touching editor internals.
-- `UI/LoupeWindow.cs` — the form hosting the second `GH_Canvas`; attaches,
-  detaches and follows the active document.
+- `UI/ToolbarButton.cs` — finds the canvas toolbar (`CanvasToolbar`) and
+  the main canvas, inserts the button, and puts the panel next to the main
+  canvas. The only file touching editor internals.
+- `UI/LoupePanel.cs` — the framed panel hosting the second `GH_Canvas`,
+  with lock and home; attaches, detaches and follows the active document.
 
 ## Code
 
@@ -25,14 +25,15 @@ paths:
 - Grasshopper from the NuGet reference the template adds; no copied DLLs.
 - No comments unless the code can't say it; no unused usings or members.
 
-## Window (ADR 0002)
+## Panel (ADR 0005)
 
-- One window per editor, created on the first click, docked bottom-left of
-  the editor, owned by the editor window, resizable.
-- Later clicks toggle hide / show. Closing with X hides; the window is only
-  disposed when the editor closes.
-- Its canvas has its own `Viewport`: zoom and pan are independent of the
-  main canvas.
+- One panel per editor, created on the first click, a sibling of the main
+  canvas, over it; later clicks hide / show. No X.
+- Frame and buttons drawn by Loupe; sizes go through `S()` so they scale
+  with the display.
+- Lock (default on) blocks move and resize; home restores 480 × 360,
+  bottom-left. It always stays inside the main canvas's bounds.
+- Its canvas has its own `Viewport` and an empty widget list.
 
 ## Sync
 

@@ -1,7 +1,7 @@
 # Loupe
 
 Grasshopper plugin (`.gha`) for Rhino 8. Adds a button to the canvas toolbar
-that opens a second, resizable window with its own navigable canvas on the
+that shows a framed panel on the canvas with its own navigable canvas on the
 same document, so two parts of one script can be viewed at once. Named after
 the jeweller's magnifier. Repo `shreykapur97/loupe`. Plan: `.docs/phases.md`.
 
@@ -35,8 +35,8 @@ checked in Rhino (a rebuild needs a Rhino restart).
 | 1 | Scaffold: template, layout, builds a `.gha` | `src/Loupe/` | plugin.md |
 | 2 | Loader: runs at load, waits for the editor | `src/Loupe/LoupeLoader.cs` | plugin.md |
 | 3 | Toolbar button appears | `src/Loupe/UI/ToolbarButton.cs` | plugin.md |
-| 4 | Window with the second canvas, toggle behaviour (ADR 0002) | `src/Loupe/UI/LoupeWindow.cs` | plugin.md |
-| 5 | Sync and cleanup: refresh, follow the active document, detach | `src/Loupe/UI/LoupeWindow.cs` | plugin.md |
+| 4 | Panel with the second canvas, lock, home, toggle (ADR 0005) | `src/Loupe/UI/LoupePanel.cs` | plugin.md |
+| 5 | Sync and cleanup: refresh, follow the active document, detach | `src/Loupe/UI/LoupePanel.cs` | plugin.md |
 
 ## Commands
 

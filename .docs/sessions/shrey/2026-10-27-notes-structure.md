@@ -79,3 +79,19 @@ to a notes structure modelled on barhopper. Session
 3. **"can i run it as a command?":** a Rhino command needs a Rhino plugin
    (`.rhp`), not a `.gha`; a menu item with a shortcut in the Grasshopper
    editor is the cheap option.
+
+## Continued — panel on the canvas, lock, home, icon
+
+1. v0.1.1-alpha "looks good, works well". Changes asked: no X; lock and
+   home instead; a frame like the image preview component; hide the
+   compass and bar; a less generic icon.
+2. Options discussed: panel inside the canvas vs floating window → inside,
+   "it should always be on the canvas not just stay in place like the
+   component" (fixed on screen, not panned with the canvas). Lock and home
+   top-left → ADR 0005, supersedes 0002.
+3. Widgets: each `GH_Canvas` builds its own widget list once, in its
+   constructor, so clearing Loupe's removes compass and Markov bar there
+   only.
+4. Icon: four options drawn (L, grasshopper, jeweller's loupe, wire); D
+   first, then B, "i like the idea that you are trying to look at a
+   grasshopper" → ADR 0006.
