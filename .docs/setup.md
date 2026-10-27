@@ -66,5 +66,5 @@ tag filled in.
 |---|---|
 | Rhino says the `.gha` is blocked | Right-click → Properties → Unblock (downloaded files only) |
 | Build fails: file in use | Close Rhino; it locks the loaded `.gha` |
-| No Loupe button | Rhino command history: "Loupe: canvas toolbar not found" means `ToolbarButton.cs` didn't find the strip |
+| No Loupe button | Grasshopper: View → Canvas Toolbar must be on. Rhino command history: "Loupe: button added…" means it loaded; "canvas toolbar not found" means `ToolbarButton.cs` didn't find the strip; neither means the plugin didn't load |
 | Plugin not loaded | Rhino 8 must run on .NET Core (default), not `/netfx` (ADR 0001) |

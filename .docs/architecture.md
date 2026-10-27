@@ -9,7 +9,7 @@ How Loupe hooks into Grasshopper. Plan and status: `phases.md` /
  Rhino 8 starts Grasshopper
    └─ loads Loupe.gha
         └─ LoupeLoader (GH_AssemblyPriority)
-             └─ CanvasCreated, then RhinoApp.Idle until the editor exists
+             └─ RhinoApp.Idle until Instances.DocumentEditor exists
                   └─ ToolbarButton: find the canvas ToolStrip, add button
                        └─ click ─▶ LoupeWindow (Form, owned by the editor)
                                      └─ GH_Canvas, Document = active document
@@ -23,9 +23,11 @@ How Loupe hooks into Grasshopper. Plan and status: `phases.md` /
 1. **Entry point:** `GH_AssemblyPriority` runs at plugin load. The editor
    doesn't exist yet, so it subscribes to the editor or canvas creation
    event and does its setup there.
-2. **Toolbar:** `Instances.DocumentEditor`, searched for the lowest
-   `ToolStrip` (not a menu or status strip) that sits above the main
-   canvas: by type and position, not fixed indices.
+2. **Toolbar:** `Instances.DocumentEditor`, searched for the `ToolStrip`
+   named `CanvasToolbar` (a `GH_Toolstrip` above the canvas in the
+   editor's `Panel1`, found by decompiling Grasshopper 8); if that name
+   changes, the lowest `ToolStrip` above the main canvas. Hidden when
+   View → Canvas Toolbar is off.
 3. **Button:** a `ToolStripButton` with icon and tooltip on that strip.
 4. **Second canvas:** a new `GH_Canvas`, `Document` = active document, in a
    resizable `Form` owned by the editor. Each canvas has its own `Viewport`.

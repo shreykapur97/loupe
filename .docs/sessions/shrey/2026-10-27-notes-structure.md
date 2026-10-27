@@ -64,3 +64,18 @@ to a notes structure modelled on barhopper. Session
   trigger it again.
 - **Sync without a loop:** main paints → Loupe redraws; Loupe mouse-up →
   main redraws. Loupe's paint never triggers main.
+
+## Continued — release and first bug
+
+1. **Install from Releases:** CI builds the `.gha` on every push; a
+   manual run with a tag (or a pushed `v*` tag) publishes a GitHub
+   Release. The session's git proxy blocks tag pushes, so `v0.1.0-alpha`
+   was made by a manual workflow run.
+2. **"the button doesn't show up":** decompiled `GH_DocumentEditor`: the
+   toolbar is a `GH_Toolstrip` named `CanvasToolbar`. Likely cause: the
+   loader waited for `CanvasCreated`, which may fire before plugins load.
+   Fix: poll `RhinoApp.Idle` from `PriorityLoad`, find the strip by name
+   first, and print a line on success.
+3. **"can i run it as a command?":** a Rhino command needs a Rhino plugin
+   (`.rhp`), not a `.gha`; a menu item with a shortcut in the Grasshopper
+   editor is the cheap option.

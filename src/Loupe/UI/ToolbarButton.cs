@@ -25,6 +25,7 @@ namespace Loupe.UI
       };
       button.Click += (s, e) => Toggle(editor, button);
       strip.Items.Add(button);
+      RhinoApp.WriteLine("Loupe: button added to the canvas toolbar.");
     }
 
     static void Toggle(GH_DocumentEditor editor, ToolStripButton button)
@@ -39,7 +40,10 @@ namespace Loupe.UI
       window.Visible = !window.Visible;
     }
 
-    static ToolStrip FindCanvasToolbar(Control editor)
+    static ToolStrip FindCanvasToolbar(Control editor) =>
+      Descendants(editor).OfType<ToolStrip>().FirstOrDefault(t => t.Name == "CanvasToolbar") ?? ToolbarAboveCanvas(editor);
+
+    static ToolStrip ToolbarAboveCanvas(Control editor)
     {
       var canvas = Descendants(editor).OfType<Grasshopper.GUI.Canvas.GH_Canvas>().FirstOrDefault();
       if (canvas == null) return null;
