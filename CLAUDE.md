@@ -40,13 +40,12 @@ checked in Rhino (a rebuild needs a Rhino restart).
 
 ## Commands
 
-Not scaffolded yet (`phases.md` → Phase 0).
-
 | What | Where | Command |
 |---|---|---|
 | Install templates (once) | anywhere | `dotnet new install Rhino.Templates` |
-| Build | repo root | `dotnet build` → `.gha` in `src/Loupe/bin/` |
-| Load in Rhino | Rhino | `GrasshopperDeveloperSettings` → add the `bin` folder, restart Rhino |
+| Build | repo root | `dotnet build` → `src/Loupe/bin/Debug/net7.0-windows/Loupe.gha` (Windows; Linux SDKs can't build `-windows` targets) |
+| Load in Rhino | Rhino | `GrasshopperDeveloperSettings` → add that folder, restart Rhino |
+| Debug | VS Code | Run → "Rhino 8" (starts Rhino) or "Attach to Rhino 8" |
 
 ## Hard rules
 

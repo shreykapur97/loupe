@@ -40,3 +40,27 @@ to a notes structure modelled on barhopper. Session
 - Package Manager name check.
 - Git workflow, distribution, Mac (`phases.md` → Open).
 - Detach barhopper from this cloud session once done.
+
+## Continued — name, scaffold and first code
+
+1. **Barhopper detached:** the read-only copy deleted; the repo stays
+   attached until the session ends.
+2. **Push** first failed (403): reconnecting GitHub wasn't enough; adding
+   `loupe` to the Claude GitHub App fixed it.
+3. **Name:** "it's free yes" in the Package Manager → ADR 0004.
+4. **"do it all and write the code":** scaffolded with
+   `dotnet new grasshopper -p:v 8` (template installed from its `.nupkg`;
+   the session can't reach NuGet search), cut to `net7.0-windows` only
+   (ADR 0001 updated), layout as in `architecture.md`, sample component
+   dropped. Wrote the loader, toolbar button, window, VS Code configs and
+   CI. Built against the real Grasshopper package with a net7.0 copy; the
+   Linux SDK can't build `-windows` targets.
+
+## Worth rereading (code)
+
+- **Why `RhinoApp.Idle`:** `CanvasCreated` fires while the editor is still
+  being built, so `Instances.DocumentEditor` can be null; Idle waits until
+  it exists. The handler unsubscribes first, so Loupe's own canvas doesn't
+  trigger it again.
+- **Sync without a loop:** main paints → Loupe redraws; Loupe mouse-up →
+  main redraws. Loupe's paint never triggers main.

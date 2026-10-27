@@ -5,16 +5,21 @@ Plan: `phases.md`.
 
 ## Now
 
-- Notes set up, modelled on barhopper (one developer): `CLAUDE.md`,
-  `.claude/` (rules, `/wrap-up`, settings), `.docs/`, README, GPL-3.0
-  licence. No code yet.
-- Decided: Rhino 8 only (ADR 0001), window opens once then toggles
-  (ADR 0002), GPL-3.0 (ADR 0003).
+- Notes, README, GPL-3.0 licence in place. ADRs 0001–0004 (Rhino 8 /
+  `net7.0-windows` only, window toggle, licence, name).
+- **Code written, not run in Rhino:** loader, toolbar button, Loupe window
+  with the second canvas, hide / show, redraw sync, document follow,
+  cleanup (`src/Loupe/`). Compiles against the Grasshopper 8 NuGet package
+  (checked on Linux with a net7.0 copy); the real `-windows` build only
+  runs on Windows or in CI.
 
 ## Next
 
-1. Check "Loupe" in the Rhino Package Manager (`case-study.md`).
-2. Phase 0: scaffold with `dotnet new grasshopper`, restructure, build a
-   `.gha` that loads.
-3. Phase 1: loader + toolbar button, checked in Rhino.
-4. Decide the git workflow (`phases.md` → Open).
+1. On Windows: `dotnet build`, load via `GrasshopperDeveloperSettings`,
+   restart Rhino. Check: button shows on the canvas toolbar, window opens
+   bottom-left, zoom / pan independent, toggle and X hide it, switching
+   files follows.
+2. Fix what doesn't work there (the toolbar search is the likeliest).
+3. Decide the git workflow; merge this branch into `main` (`phases.md` →
+   Open).
+4. Claim the Package Manager name with a first release (ADR 0004).

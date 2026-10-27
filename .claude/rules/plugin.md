@@ -21,8 +21,7 @@ paths:
 
 ## Code
 
-- Rhino 8 target only, as the `dotnet new grasshopper` template sets it
-  (ADR 0001).
+- One target: `net7.0-windows` (ADR 0001).
 - Grasshopper from the NuGet reference the template adds; no copied DLLs.
 - No comments unless the code can't say it; no unused usings or members.
 
@@ -38,7 +37,10 @@ paths:
 ## Sync
 
 - Selection, wires and solutions live on the document, so they are shared.
-- Refresh the second canvas after solutions and object changes.
+- The Loupe canvas redraws when the main canvas paints
+  (`CanvasPostPaintOverlay`), which covers solutions, selection and moves;
+  a mouse-up in Loupe redraws the main canvas. Never redraw from Loupe's
+  own paint events (loop).
 - Follow the active document when the user switches files.
 - Every event subscribed is unsubscribed on dispose; `Document = null`
   before the canvas goes.

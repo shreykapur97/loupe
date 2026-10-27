@@ -23,15 +23,14 @@ cd loupe
 dotnet new install Rhino.Templates
 ```
 
-Not scaffolded yet: phase 0 runs `dotnet new grasshopper` and moves the
-result into `src/Loupe/` (`architecture.md` → Repo layout). The template
-sets the Grasshopper NuGet reference, the Rhino 8 target framework and the
-`.gha` output.
+`src/Loupe/` came from `dotnet new grasshopper -p:v 8`, cut down to one
+target (ADR 0001). `Rhino.Templates` is only needed to scaffold something
+new.
 
 ### Loading the plugin in Rhino
 
 Once, in Rhino: run `GrasshopperDeveloperSettings`, add
-`src/Loupe/bin/<config>/<framework>/`, restart Rhino. (Or copy the `.gha`
+`src/Loupe/bin/Debug/net7.0-windows/`, restart Rhino. (Or copy the `.gha`
 to the Libraries folder.)
 
 ## 3. Daily commands
@@ -41,7 +40,7 @@ Same table as CLAUDE.md → Commands.
 | What | Where | Command |
 |---|---|---|
 | Build | repo root | `dotnet build` |
-| Debug | VS Code | Run → start Rhino.exe, or attach to a running Rhino (`.vscode/launch.json`) |
+| Debug | VS Code | Run → "Rhino 8" or "Attach to Rhino 8" (`.vscode/launch.json`) |
 
 Every rebuild needs a Rhino restart.
 
@@ -51,3 +50,5 @@ Every rebuild needs a Rhino restart.
 |---|---|
 | Rhino says the `.gha` is blocked | Right-click → Properties → Unblock (downloaded files only) |
 | Build fails: file in use | Close Rhino; it locks the loaded `.gha` |
+| No Loupe button | Rhino command history: "Loupe: canvas toolbar not found" means `ToolbarButton.cs` didn't find the strip |
+| Plugin not loaded | Rhino 8 must run on .NET Core (default), not `/netfx` (ADR 0001) |

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <TargetExt>.gha</TargetExt>
+    <Nullable>disable</Nullable>
+    <NoWarn>NU1701;NETSDK1086;NETSDK1138</NoWarn>
+    <Version>0.1.0</Version>
+    <Title>Loupe</Title>
+    <Company>Shrey Kapur</Company>
+    <Description>A second, navigable canvas on the same Grasshopper document.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grasshopper" Version="8.0.23304.9001" ExcludeAssets="runtime" />
+    <EmbeddedResource Include="Resources\loupe_24.png" LogicalName="loupe_24.png" />
+  </ItemGroup>
+
+</Project>

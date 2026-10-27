@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Rhino 8",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "C:\\Program Files\\Rhino 8\\System\\Rhino.exe",
+      "args": "/netcore /runscript=\"_Grasshopper\"",
+      "env": { "RHINO_PACKAGE_DIRS": "${workspaceFolder}/src/Loupe/bin/Debug" },
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole"
+    },
+    {
+      "name": "Attach to Rhino 8",
+      "type": "coreclr",
+      "request": "attach",
+      "processName": "Rhino.exe"
+    }
+  ]
+}

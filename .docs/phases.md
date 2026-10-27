@@ -10,14 +10,14 @@ Each confirmed item gets an ADR (`adr/_index.md`) and a one-line pointer here.
 - **Window:** first click opens it bottom-left; later clicks hide / show;
   closing hides. (ADR 0002)
 - **Licence:** GPL-3.0. (ADR 0003)
+- **Name:** Loupe, free on food4Rhino, GitHub and the Package Manager.
+  (ADR 0004)
 
 ## To confirm
 
 Choices from the handover (2026-10-27), before ADRs existed. When one is
 confirmed, write its ADR and move it to Decided.
 
-- **Name:** Loupe. Free on food4Rhino and GitHub; not yet checked in the
-  Rhino Package Manager (`case-study.md` → Findings).
 - **Approach:** the five steps in `architecture.md` (loader, toolbar,
   button, second `GH_Canvas` in an owned `Form`, sync and cleanup).
 - **Tooling:** VS Code + .NET SDK + C# Dev Kit, scaffolded with
@@ -31,10 +31,9 @@ Each phase is done when it works in Rhino 8 on Shrey's machine.
 
 ### 0. Foundation
 
-- Name checked in the Package Manager.
 - Scaffold with `dotnet new grasshopper`, restructure into the layout,
-  `dotnet build` gives a `.gha` that loads.
-- `.vscode/launch.json` and `tasks.json` for build + debug.
+  `dotnet build` gives a `.gha` that loads. Written; loading not checked.
+- `.vscode/launch.json` and `tasks.json` for build + debug. Written.
 
 ### 1. Button
 
@@ -59,13 +58,13 @@ Each phase is done when it works in Rhino 8 on Shrey's machine.
 
 | Feature | Status |
 |---|---|
-| Plugin loads | not started |
-| Toolbar button | not started |
-| Second canvas window | not started |
-| Hide / show toggle | not started |
-| Refresh on solve / changes | not started |
-| Follows active document | not started |
-| Cleanup on close | not started |
+| Plugin loads | written, not checked in Rhino |
+| Toolbar button | written, not checked in Rhino |
+| Second canvas window | written, not checked in Rhino |
+| Hide / show toggle | written, not checked in Rhino |
+| Refresh on solve / changes | written, not checked in Rhino |
+| Follows active document | written, not checked in Rhino |
+| Cleanup on close | written, not checked in Rhino |
 
 ## Open
 
