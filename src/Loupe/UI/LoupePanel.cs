@@ -11,9 +11,10 @@ namespace Loupe.UI
     const int MoveGrip = 16;
     readonly GH_Canvas main;
     readonly LoupeCanvas canvas;
-    readonly IconButton lockButton, floatButton, viewButton;
+    readonly IconButton pinButton, viewButton;
     readonly float scale;
     FloatingHost host;
+    Rectangle pinnedBounds;
     int grip;
     Point dragStart;
     Rectangle boundsStart;
@@ -25,17 +26,14 @@ namespace Loupe.UI
       canvas = new LoupeCanvas(main);
       DoubleBuffered = true;
       Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-      lockButton = AddButton(0, "lock", "lock-open", () => lockButton.Active = !lockButton.Active);
+      pinButton = AddButton(0, "pin", "pin-off", TogglePinned);
       AddButton(1, "house", null, Home);
-      floatButton = AddButton(2, "square-arrow-down-left", "square-arrow-out-up-right", ToggleFloating);
-      viewButton = AddButton(3, "eye", "pencil", () => canvas.ViewOnly = viewButton.Active = !viewButton.Active);
-      AddButton(4, "scan", null, MatchView);
-      floatButton.Active = false;
+      viewButton = AddButton(2, "eye", "pencil", () => canvas.ViewOnly = viewButton.Active = !viewButton.Active);
+      AddButton(3, "scan", null, MatchView);
       Controls.Add(canvas);
       main.SizeChanged += OnMainResized;
     }
 
-    bool Locked => lockButton.Active;
     bool Floating => host != null;
     Control Target => Floating ? host : this;
     int Border => S(5);
@@ -56,7 +54,7 @@ namespace Loupe.UI
 
     public void Home()
     {
-      if (Floating) ToggleFloating();
+      if (Floating) TogglePinned();
       Bounds = Clamp(new Rectangle(main.Left + S(16), main.Bottom - S(376), S(480), S(360)));
     }
 
@@ -68,11 +66,12 @@ namespace Loupe.UI
       return b;
     }
 
-    void ToggleFloating()
+    void TogglePinned()
     {
       if (Floating)
       {
-        var r = main.Parent.RectangleToClient(host.Bounds);
+        var canvasOnScreen = main.Parent.RectangleToScreen(main.Bounds);
+        var r = canvasOnScreen.IntersectsWith(host.Bounds) ? main.Parent.RectangleToClient(host.Bounds) : pinnedBounds;
         var old = host;
         host = null;
         Dock = DockStyle.None;
@@ -84,13 +83,14 @@ namespace Loupe.UI
       }
       else
       {
+        pinnedBounds = Bounds;
         host = new FloatingHost { Bounds = main.Parent.RectangleToScreen(Bounds) };
         Anchor = AnchorStyles.None;
         Dock = DockStyle.Fill;
         host.Controls.Add(this);
         host.Show(main.FindForm());
       }
-      floatButton.Active = Floating;
+      pinButton.Active = !Floating;
     }
 
     void OnMainResized(object sender, EventArgs e)
@@ -126,7 +126,7 @@ namespace Loupe.UI
 
     int HitTest(Point p)
     {
-      if (Locked) return 0;
+      if (!Floating) return 0;
       int c = S(20);
       bool l = p.X < c, r = p.X > Width - c, t = p.Y < c, b = p.Y > Height - c;
       return (l || r) && (t || b) ? (l ? 1 : 0) | (r ? 2 : 0) | (t ? 4 : 0) | (b ? 8 : 0) : MoveGrip;

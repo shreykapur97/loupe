@@ -13,7 +13,7 @@ How Loupe hooks into Grasshopper. Plan and status: `phases.md` /
                   └─ ToolbarButton: find the canvas ToolStrip, add button
                        └─ click ─▶ LoupePanel (over the main canvas, same parent,
                                      │            or inside a FloatingHost)
-                                     ├─ IconButtons: lock, home, float,
+                                     ├─ IconButtons: pin, home,
                                      │               view only, match view
                                      └─ LoupeCanvas : GH_Canvas
                                         Document = active document
@@ -75,7 +75,7 @@ loupe/
     ├── Assets.cs         embedded PNGs by name
     ├── UI/
     │   ├── ToolbarButton.cs   the only file touching editor internals
-    │   ├── LoupePanel.cs      frame, buttons, move / resize, dock / float
+    │   ├── LoupePanel.cs      frame, buttons, pin / float, move / resize
     │   ├── LoupeCanvas.cs     second GH_Canvas: sync, view only, match view
     │   ├── IconButton.cs      two-state icon button
     │   ├── FloatingHost.cs    borderless window for floating

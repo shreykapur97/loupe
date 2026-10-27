@@ -1,6 +1,8 @@
-# 0007 — Five buttons: lock, home, float, view only, match view
+# 0007 — Four buttons: pin, home, view only, match view
 
 Date: 2026-10-27 · Status: accepted · Decided by: shrey
+Updated 2026-10-27: lock and float merged into pin ("the lock button and
+the popout can be merged").
 
 ## Supersedes
 
@@ -22,16 +24,17 @@ the borders" as clean as Grasshopper's panel component.
   the panel component. Same frame docked and floating; floating adds a
   drop shadow. No title bar, no X.
 - **Buttons**, stacked down the left edge, over the canvas:
-  1. **Lock** (default on): no move or resize. Unlocked: drag the frame to
-     move, a corner to resize.
-  2. **Home:** docks Loupe back on the canvas, default size (480 × 360 at
-     100% scaling), bottom-left.
-  3. **Float / dock:** moves Loupe between the main canvas and its own
-     borderless window (above the editor, anywhere on screen, not in the
-     taskbar). Docking back keeps its place, pushed inside the canvas.
-  4. **View only** (default on): no editing and no navigation — clicks,
+  1. **Pin** (default on): pinned, Loupe sits on the canvas, fixed.
+     Unpinned, it floats in its own borderless window (above the editor,
+     anywhere on screen, not in the taskbar) that can be dragged by the
+     frame and resized by a corner. Pinning again docks it where the
+     window is if that overlaps the main canvas (pushed inside it),
+     otherwise where it was last pinned.
+  2. **Home:** pins Loupe, default size (480 × 360 at 100% scaling),
+     bottom-left.
+  3. **View only** (default on): no editing and no navigation — clicks,
      wheel, keys and drops are ignored. Off: a normal canvas.
-  5. **Match view:** Loupe takes the main canvas's zoom and centre.
+  4. **Match view:** Loupe takes the main canvas's zoom and centre.
 - **Opening:** the first click shows it docked, bottom-left, at the main
   canvas's current view (same zoom, same centre). Later clicks hide / show.
 - **Closing the Grasshopper editor** hides Loupe, docked or floating.
@@ -42,7 +45,9 @@ the borders" as clean as Grasshopper's panel component.
 
 - A frozen Loupe only moves by match view; to look around inside it, turn
   view only off.
-- Docked, Loupe can't leave the editor; floating, it can go anywhere,
-  including another monitor.
+- Pinned, Loupe can't leave the editor; unpinned, it can go anywhere,
+  including another monitor. Rearranging it on the canvas means unpin,
+  place, pin.
+- A floating Loupe can't be locked in place.
 - Rounded corners are slightly jagged (WinForms region clipping); the
   floating shadow may follow the window's rectangle, not its corners.

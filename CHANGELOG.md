@@ -2,6 +2,13 @@
 
 Downloads: [Releases](https://github.com/shreykapur97/loupe/releases).
 
+## 0.4.0-alpha — 2026-10-27
+
+- Lock and float / dock merged into one **pin** button: pinned, Loupe is
+  fixed on the canvas; unpinned, it floats and can be moved and resized.
+  Pinning it over the canvas drops it there.
+- Four buttons instead of five.
+
 ## 0.3.0-alpha — 2026-10-27
 
 - Five buttons down the left edge: lock, home, float / dock, view only,

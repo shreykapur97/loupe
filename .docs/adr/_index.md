@@ -13,5 +13,5 @@ Rules: `.claude/rules/docs.md`.
 | [0004](0004-name-loupe.md) | Name: Loupe | scope | shrey | accepted |
 | [0005](0005-panel-on-the-canvas.md) | Loupe is a framed panel on the canvas, with lock and home | behaviour | shrey | superseded by 0007 |
 | [0006](0006-icon-grasshopper-under-a-magnifier.md) | Icon: a grasshopper under a magnifier | design | shrey | accepted |
-| [0007](0007-five-buttons-floating-view-only.md) | Five buttons: lock, home, float, view only, match view; panel-style frame | behaviour | shrey | accepted |
+| [0007](0007-five-buttons-floating-view-only.md) | Four buttons: pin, home, view only, match view; panel-style frame | behaviour | shrey | accepted |
 | [0008](0008-lucide-icons.md) | Panel button icons from Lucide | design | shrey | accepted |

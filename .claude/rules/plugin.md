@@ -17,7 +17,7 @@ paths:
   the main canvas, inserts the button, creates the panel next to the main
   canvas, hides it when the editor closes. The only file touching editor
   internals (`LoupePanel` only uses the main canvas's parent to dock back).
-- `UI/LoupePanel.cs` — frame, buttons, move / resize, dock / float.
+- `UI/LoupePanel.cs` — frame, buttons, pin / float, move / resize.
 - `UI/LoupeCanvas.cs` — the second `GH_Canvas`: follows the document,
   redraws with the main canvas, view only, match view.
 - `UI/IconButton.cs` — a square button showing one of two icons.
@@ -36,10 +36,11 @@ paths:
 
 - One panel per editor, created on the first click; later clicks hide /
   show. No X.
-- Buttons top-down: lock, home, float, view only, match view. Lock and
-  view only start on.
-- Docked: a sibling of the main canvas, over it, always inside its bounds.
-  Floating: the same panel inside a `FloatingHost` owned by the editor.
+- Buttons top-down: pin, home, view only, match view. Pin and view only
+  start on.
+- Pinned: a sibling of the main canvas, over it, always inside its bounds,
+  can't be moved. Unpinned: the same panel inside a `FloatingHost` owned
+  by the editor; only then can it be moved and resized.
 - Sizes go through `S()` so they scale with the display.
 - Icons come from `Resources/Icons` (Lucide); no glyphs drawn in code.
 

@@ -120,3 +120,16 @@ to a notes structure modelled on barhopper. Session
   events (decompiled). `LoupeCanvas` overrides `OnMouseDown` etc. and
   doesn't call `base`, so those events never fire and Grasshopper never
   sees the input.
+
+## Continued — sharing and the pin
+
+1. v0.3.0-alpha installed; "update readme and everything so i can share
+   it": README rewritten for users, CHANGELOG added, version in the
+   project file. The README's "latest release" link was wrong for
+   pre-releases (GitHub never marks one as latest) → Releases page.
+2. "the lock button and the popout can be merged": pin. Pinned = on the
+   canvas, fixed; unpinned = floating, movable; pinning drops it where
+   the window is if it overlaps the canvas, else where it was last pinned
+   → ADR 0007 updated, v0.4.0-alpha.
+3. Delete older releases after 0.4.0: no release tool in this session and
+   the git proxy blocks tag pushes, so done by Shrey on GitHub.

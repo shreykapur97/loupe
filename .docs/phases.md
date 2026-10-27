@@ -7,8 +7,8 @@ The build plan. Where Shrey is right now: `status/shrey.md`.
 Each confirmed item gets an ADR (`adr/_index.md`) and a one-line pointer here.
 
 - **Target:** Rhino 8 only, as the template sets it. (ADR 0001)
-- **Panel:** a framed panel on the canvas or floating; five buttons down
-  the left (lock, home, float, view only, match view); opens at the main
+- **Panel:** a framed panel pinned on the canvas or floating; four buttons
+  down the left (pin, home, view only, match view); opens at the main
   canvas's view. (ADR 0007)
 - **Button icons:** Lucide. (ADR 0008)
 - **Icon:** a grasshopper under a magnifier. (ADR 0006)
@@ -46,7 +46,7 @@ Each phase is done when it works in Rhino 8 on Shrey's machine.
 ### 2. Window
 
 - Second canvas on the active document, as a panel on the canvas or
-  floating, five buttons (ADR 0007).
+  floating, four buttons (ADR 0007).
 
 ### 3. Sync and cleanup
 
@@ -66,11 +66,11 @@ Each phase is done when it works in Rhino 8 on Shrey's machine.
 | Second canvas window | works (v0.1.1-alpha) |
 | Hide / show toggle | works (v0.2.0-alpha) |
 | Panel on the canvas: frame, lock, home, no widgets | works (v0.2.0-alpha) |
-| Panel-style frame, Lucide icons | written, not checked in Rhino |
-| Float / dock | written, not checked in Rhino |
-| View only (default) | written, not checked in Rhino |
-| Match view, open at main view | written, not checked in Rhino |
-| Hides when the editor closes | written, not checked in Rhino |
+| Panel-style frame, Lucide icons | works (v0.3.0-alpha) |
+| Pin / float (lock and float merged) | written, not checked in Rhino |
+| View only (default) | works (v0.3.0-alpha) |
+| Match view, open at main view | works (v0.3.0-alpha) |
+| Hides when the editor closes | works (v0.3.0-alpha) |
 | Refresh on solve / changes | written, not checked in Rhino |
 | Follows active document | written, not checked in Rhino |
 | Cleanup on close | written, not checked in Rhino |

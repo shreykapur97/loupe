@@ -51,9 +51,8 @@ The buttons down Loupe's left edge, top to bottom:
 
 | | Button | What it does |
 |---|---|---|
-| <img src="src/Loupe/Resources/Icons/lock.png" width="16" alt=""> | **Lock** | On (default): Loupe stays put. Off: drag its frame to move it, a corner to resize it. |
-| <img src="src/Loupe/Resources/Icons/house.png" width="16" alt=""> | **Home** | Back on the canvas, default size, bottom-left. |
-| <img src="src/Loupe/Resources/Icons/square-arrow-out-up-right.png" width="16" alt=""> | **Float / dock** | Pops Loupe out into its own window you can put anywhere (another monitor too), and back. |
+| <img src="src/Loupe/Resources/Icons/pin.png" width="16" alt=""> | **Pin** | On (default): Loupe sits fixed on the canvas. Off: it floats in its own window: drag its frame to move it anywhere (another monitor too), a corner to resize it. Pin it again over the canvas to drop it there. |
+| <img src="src/Loupe/Resources/Icons/house.png" width="16" alt=""> | **Home** | Pinned, default size, bottom-left. |
 | <img src="src/Loupe/Resources/Icons/eye.png" width="16" alt=""> | **View only** | On (default): Loupe is frozen: no editing, no pan or zoom, so nothing changes by accident. Off: pan, zoom and edit in it like the main canvas. |
 | <img src="src/Loupe/Resources/Icons/scan.png" width="16" alt=""> | **Match view** | Loupe jumps to what the main canvas shows right now. |
 
@@ -79,7 +78,7 @@ sessions: it opens fresh each time.
 | No Loupe button | Grasshopper: **View → Canvas Toolbar** must be on. |
 | Still no button, and Rhino's command history has no Loupe line | It didn't load: unblock the file (Install, step 2) and make sure Rhino isn't started with `/netfx`. |
 | Command history says "canvas toolbar not found" | Please [open an issue](https://github.com/shreykapur97/loupe/issues) with your Rhino version. |
-| Can't move or resize it | Turn **Lock** off, then drag the dark frame or a corner. |
+| Can't move or resize it | Unpin it, then drag the dark frame or a corner; pin it again where you want it. |
 | Can't pan or zoom in it | Turn **View only** off, or use **Match view**. |
 
 ## Build from source

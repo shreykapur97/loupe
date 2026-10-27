@@ -1,7 +1,7 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
 const [src, out] = process.argv.slice(2);
-const names = ['lock','lock-open','house','square-arrow-out-up-right','square-arrow-down-left','eye','pencil','scan'];
+const names = ['pin','pin-off','house','eye','pencil','scan'];
 (async () => {
   const b = await chromium.launch(); const p = await b.newPage({ deviceScaleFactor: 1 });
   for (const n of names) {
