@@ -96,3 +96,6 @@ its source.
 
 Button icons: [Lucide](https://lucide.dev), ISC licence
 ([`LICENSE-lucide.txt`](src/Loupe/Resources/Icons/LICENSE-lucide.txt)).
+
+
+As a human, reviewed the code a little bit, claude did most of the work, lol.
