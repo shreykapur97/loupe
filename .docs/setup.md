@@ -57,6 +57,9 @@ git tag v0.1.0-alpha
 git push origin v0.1.0-alpha
 ```
 
+Or without a local tag: GitHub → Actions → build → Run workflow, with the
+tag filled in.
+
 ## 5. Troubleshooting
 
 | Symptom | Fix |

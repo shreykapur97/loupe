@@ -4,6 +4,10 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag, e.g. v0.1.0-alpha (empty: build only)"
+        required: false
 
 permissions:
   contents: write
@@ -21,9 +25,11 @@ jobs:
         with:
           name: Loupe
           path: src/Loupe/bin/Release/net7.0-windows/Loupe.gha
-      - if: startsWith(github.ref, 'refs/tags/v')
+      - if: startsWith(github.ref, 'refs/tags/v') || inputs.tag != ''
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ inputs.tag || github.ref_name }}
+          target_commitish: ${{ github.sha }}
           files: src/Loupe/bin/Release/net7.0-windows/Loupe.gha
-          prerelease: ${{ contains(github.ref_name, '-') }}
+          prerelease: ${{ contains(inputs.tag || github.ref_name, '-') }}
           generate_release_notes: true
