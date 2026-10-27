@@ -8,7 +8,7 @@ can look at two parts of one script at once. Click again to hide or show it.
 
 Named after the jeweller's magnifier.
 
-**Status:** early development, nothing to install yet.
+**Status:** early development; releases marked pre-release are untested.
 
 ## Requirements
 
@@ -16,9 +16,15 @@ Named after the jeweller's magnifier.
 
 ## Install
 
-Not released yet. Once it is: download `Loupe.gha` from Releases, put it in
-the Grasshopper Libraries folder (`File → Special Folders → Components
-Folder`), unblock it if Windows asks, and restart Rhino.
+1. Download `Loupe.gha` from the
+   [latest release](https://github.com/shreykapur97/loupe/releases/latest).
+2. Right-click it → Properties → tick **Unblock** → OK (Windows blocks
+   downloaded plugins).
+3. In Grasshopper: `File → Special Folders → Components Folder`, and drop
+   `Loupe.gha` in there.
+4. Restart Rhino.
+
+To uninstall, delete `Loupe.gha` from that folder and restart Rhino.
 
 ## Use
 

@@ -46,6 +46,7 @@ checked in Rhino (a rebuild needs a Rhino restart).
 | Build | repo root | `dotnet build` → `src/Loupe/bin/Debug/net7.0-windows/Loupe.gha` (Windows; Linux SDKs can't build `-windows` targets) |
 | Load in Rhino | Rhino | `GrasshopperDeveloperSettings` → add that folder, restart Rhino |
 | Debug | VS Code | Run → "Rhino 8" (starts Rhino) or "Attach to Rhino 8" |
+| Release | repo root | `git tag vX.Y.Z` + `git push origin vX.Y.Z` → CI attaches `Loupe.gha` to a GitHub Release (`-` in the tag → pre-release) |
 
 ## Hard rules
 

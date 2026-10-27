@@ -44,7 +44,20 @@ Same table as CLAUDE.md → Commands.
 
 Every rebuild needs a Rhino restart.
 
-## 4. Troubleshooting
+## 4. Releasing
+
+CI (`.github/workflows/build.yml`) builds the `.gha` on Windows on every
+push; the build is under the run's Artifacts. A tag starting with `v`
+also makes a GitHub Release with `Loupe.gha` attached, which is what users
+download (README → Install). A tag with `-` (`v0.1.0-alpha`) is marked
+pre-release.
+
+```
+git tag v0.1.0-alpha
+git push origin v0.1.0-alpha
+```
+
+## 5. Troubleshooting
 
 | Symptom | Fix |
 |---|---|
