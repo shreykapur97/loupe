@@ -95,3 +95,28 @@ to a notes structure modelled on barhopper. Session
 4. Icon: four options drawn (L, grasshopper, jeweller's loupe, wire); D
    first, then B, "i like the idea that you are trying to look at a
    grasshopper" → ADR 0006.
+
+## Continued — five buttons, floating, view only
+
+1. v0.2.0-alpha "works well". Shrey asked for a toggle between the panel
+   on the canvas and a floating window; stopped the build: "dont do it
+   right now we are talking to discuss upgrades".
+2. Decided in discussion → ADR 0007 (supersedes 0005): home docks back
+   and resets the size; nothing remembered; closing Grasshopper hides
+   Loupe; one Loupe; a view-only button, on by default, that "freezes
+   naviation too"; Loupe opens at the main canvas's view and a match-view
+   button resets it ("same zoom same center"); five buttons stacked on the
+   left; the frame's "edges and the borders" like the panel component.
+3. "take the icons from lucid" → Lucide (ADR 0008), rendered to PNG with
+   Playwright from the npm package (the session can't reach unpkg or
+   jsDelivr), licence shipped in the repo and the `.gha`.
+4. "make sure the codebase architecture is clean": `LoupePanel` split
+   into `LoupePanel` (frame, buttons, placement), `LoupeCanvas` (sync, view
+   only, match view), `IconButton`, `FloatingHost`, `Style`, `Assets`.
+
+## Worth rereading (view only)
+
+- `GH_Canvas` subscribes its own handlers to its `MouseDown`, `KeyDown`…
+  events (decompiled). `LoupeCanvas` overrides `OnMouseDown` etc. and
+  doesn't call `base`, so those events never fire and Grasshopper never
+  sees the input.

@@ -1,6 +1,6 @@
 # 0005 — Loupe is a framed panel on the canvas, with lock and home
 
-Date: 2026-10-27 · Status: accepted · Decided by: shrey
+Date: 2026-10-27 · Status: superseded by 0007 · Decided by: shrey
 
 ## Context
 

@@ -3,19 +3,17 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Grasshopper.GUI.Canvas;
-using Grasshopper.Kernel;
 
 namespace Loupe.UI
 {
   class LoupePanel : Control
   {
-    const int Move = 16;
-    static readonly Color Ink = Color.FromArgb(40, 40, 40);
+    const int MoveGrip = 16;
     readonly GH_Canvas main;
-    readonly GH_Canvas canvas = new GH_Canvas();
-    readonly IconButton lockButton, homeButton;
+    readonly LoupeCanvas canvas;
+    readonly IconButton lockButton, floatButton, viewButton;
     readonly float scale;
-    bool locked = true;
+    FloatingHost host;
     int grip;
     Point dragStart;
     Rectangle boundsStart;
@@ -24,52 +22,90 @@ namespace Loupe.UI
     {
       this.main = main;
       scale = main.DeviceDpi / 96f;
+      canvas = new LoupeCanvas(main);
       DoubleBuffered = true;
       Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-      canvas.Widgets.Clear();
-      lockButton = new IconButton(S(20), g => DrawLock(g, locked)) { Location = new Point(S(12), S(12)) };
-      homeButton = new IconButton(S(20), DrawHome) { Location = new Point(S(36), S(12)) };
-      lockButton.Click += (s, e) => { locked = !locked; lockButton.Invalidate(); };
-      homeButton.Click += (s, e) => Home();
-      Controls.AddRange(new Control[] { lockButton, homeButton, canvas });
-      Attach(main.Document);
-      main.DocumentChanged += OnDocumentChanged;
-      main.CanvasPostPaintOverlay += OnMainPainted;
+      lockButton = AddButton(0, "lock", "lock-open", () => lockButton.Active = !lockButton.Active);
+      AddButton(1, "house", null, Home);
+      floatButton = AddButton(2, "square-arrow-down-left", "square-arrow-out-up-right", ToggleFloating);
+      viewButton = AddButton(3, "eye", "pencil", () => canvas.ViewOnly = viewButton.Active = !viewButton.Active);
+      AddButton(4, "scan", null, MatchView);
+      floatButton.Active = false;
+      Controls.Add(canvas);
       main.SizeChanged += OnMainResized;
-      canvas.MouseUp += OnLoupeMouseUp;
     }
 
+    bool Locked => lockButton.Active;
+    bool Floating => host != null;
+    Control Target => Floating ? host : this;
+    int Border => S(5);
+    int Radius => S(10);
     int S(int v) => (int)(v * scale);
-    int Border => S(8);
+
+    public bool Shown
+    {
+      get => Target.Visible;
+      set
+      {
+        Target.Visible = value;
+        if (value && !Floating) BringToFront();
+      }
+    }
+
+    public void MatchView() => canvas.MatchView();
 
     public void Home()
     {
-      Size = new Size(S(480), S(360));
-      Location = new Point(main.Left + S(16), main.Bottom - Height - S(16));
-      Bounds = Clamp(Bounds);
+      if (Floating) ToggleFloating();
+      Bounds = Clamp(new Rectangle(main.Left + S(16), main.Bottom - S(376), S(480), S(360)));
     }
 
-    void Attach(GH_Document doc)
+    IconButton AddButton(int row, string on, string off, Action click)
     {
-      canvas.Document = doc;
-      canvas.Invalidate();
+      var b = new IconButton(S(22), on, off) { Location = new Point(S(10), S(10) + row * S(26)), Active = true };
+      b.Click += (s, e) => click();
+      Controls.Add(b);
+      return b;
     }
 
-    void OnDocumentChanged(GH_Canvas sender, GH_CanvasDocumentChangedEventArgs e) => Attach(e.NewDocument);
-
-    void OnMainPainted(GH_Canvas sender)
+    void ToggleFloating()
     {
-      if (Visible) canvas.Invalidate();
+      if (Floating)
+      {
+        var r = main.Parent.RectangleToClient(host.Bounds);
+        var old = host;
+        host = null;
+        Dock = DockStyle.None;
+        main.Parent.Controls.Add(this);
+        Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+        Bounds = Clamp(r);
+        BringToFront();
+        old.Dispose();
+      }
+      else
+      {
+        host = new FloatingHost { Bounds = main.Parent.RectangleToScreen(Bounds) };
+        Anchor = AnchorStyles.None;
+        Dock = DockStyle.Fill;
+        host.Controls.Add(this);
+        host.Show(main.FindForm());
+      }
+      floatButton.Active = Floating;
     }
 
-    void OnMainResized(object sender, EventArgs e) => Bounds = Clamp(Bounds);
-
-    void OnLoupeMouseUp(object sender, MouseEventArgs e) => main.Invalidate();
+    void OnMainResized(object sender, EventArgs e)
+    {
+      if (!Floating) Bounds = Clamp(Bounds);
+    }
 
     protected override void OnResize(EventArgs e)
     {
       canvas.Bounds = Rectangle.Inflate(ClientRectangle, -Border, -Border);
-      using (var path = Rounded(ClientRectangle, S(10))) Region = new Region(path);
+      using (var path = Style.Rounded(ClientRectangle, Radius))
+      {
+        Region = new Region(path);
+        if (Floating) host.Region = new Region(path);
+      }
       Invalidate();
       base.OnResize(e);
     }
@@ -78,31 +114,29 @@ namespace Loupe.UI
     {
       var g = e.Graphics;
       g.SmoothingMode = SmoothingMode.AntiAlias;
-      var r = new Rectangle(0, 0, Width - 1, Height - 1);
-      using (var path = Rounded(r, S(10)))
-      using (var fill = new LinearGradientBrush(r, Color.FromArgb(175, 175, 175), Color.FromArgb(105, 105, 105), 90f))
-      using (var edge = new Pen(Ink, S(2)))
+      using (var outline = Style.Rounded(ClientRectangle, Radius))
+      using (var rim = Style.Rounded(Rectangle.Inflate(ClientRectangle, -S(3), -S(3)), Radius - S(3)))
+      using (var ink = new SolidBrush(Style.Ink))
+      using (var light = new SolidBrush(Style.Rim))
       {
-        g.FillPath(fill, path);
-        g.DrawPath(edge, path);
+        g.FillPath(ink, outline);
+        g.FillPath(light, rim);
       }
-      using (var rim = new Pen(Color.FromArgb(235, 235, 235), S(2)))
-        g.DrawRectangle(rim, Rectangle.Inflate(canvas.Bounds, 1, 1));
     }
 
     int HitTest(Point p)
     {
-      if (locked) return 0;
+      if (Locked) return 0;
       int c = S(20);
       bool l = p.X < c, r = p.X > Width - c, t = p.Y < c, b = p.Y > Height - c;
-      return (l || r) && (t || b) ? (l ? 1 : 0) | (r ? 2 : 0) | (t ? 4 : 0) | (b ? 8 : 0) : Move;
+      return (l || r) && (t || b) ? (l ? 1 : 0) | (r ? 2 : 0) | (t ? 4 : 0) | (b ? 8 : 0) : MoveGrip;
     }
 
     protected override void OnMouseDown(MouseEventArgs e)
     {
       grip = e.Button == MouseButtons.Left ? HitTest(e.Location) : 0;
       dragStart = Cursor.Position;
-      boundsStart = Bounds;
+      boundsStart = Target.Bounds;
       base.OnMouseDown(e);
     }
 
@@ -111,23 +145,13 @@ namespace Loupe.UI
       if (grip == 0)
       {
         var h = HitTest(e.Location);
-        Cursor = h == 0 ? Cursors.Default : h == Move ? Cursors.SizeAll : h == 5 || h == 10 ? Cursors.SizeNWSE : Cursors.SizeNESW;
+        Cursor = h == 0 ? Cursors.Default : h == MoveGrip ? Cursors.SizeAll : h == 5 || h == 10 ? Cursors.SizeNWSE : Cursors.SizeNESW;
       }
       else
       {
-        int dx = Cursor.Position.X - dragStart.X, dy = Cursor.Position.Y - dragStart.Y;
-        var r = boundsStart;
-        if (grip == Move) r.Offset(dx, dy);
-        else
-        {
-          if ((grip & 1) != 0) { r.X += dx; r.Width -= dx; }
-          if ((grip & 2) != 0) r.Width += dx;
-          if ((grip & 4) != 0) { r.Y += dy; r.Height -= dy; }
-          if ((grip & 8) != 0) r.Height += dy;
-          if (r.Width < S(160)) { if ((grip & 1) != 0) r.X = boundsStart.Right - S(160); r.Width = S(160); }
-          if (r.Height < S(120)) { if ((grip & 4) != 0) r.Y = boundsStart.Bottom - S(120); r.Height = S(120); }
-        }
-        Bounds = Clamp(r);
+        var r = Dragged(Cursor.Position.X - dragStart.X, Cursor.Position.Y - dragStart.Y);
+        if (Floating) host.Bounds = r;
+        else Bounds = Clamp(r);
       }
       base.OnMouseMove(e);
     }
@@ -136,6 +160,23 @@ namespace Loupe.UI
     {
       grip = 0;
       base.OnMouseUp(e);
+    }
+
+    Rectangle Dragged(int dx, int dy)
+    {
+      var r = boundsStart;
+      if (grip == MoveGrip)
+      {
+        r.Offset(dx, dy);
+        return r;
+      }
+      if ((grip & 1) != 0) { r.X += dx; r.Width -= dx; }
+      if ((grip & 2) != 0) r.Width += dx;
+      if ((grip & 4) != 0) { r.Y += dy; r.Height -= dy; }
+      if ((grip & 8) != 0) r.Height += dy;
+      if (r.Width < S(160)) { if ((grip & 1) != 0) r.X = boundsStart.Right - S(160); r.Width = S(160); }
+      if (r.Height < S(160)) { if ((grip & 4) != 0) r.Y = boundsStart.Bottom - S(160); r.Height = S(160); }
+      return r;
     }
 
     Rectangle Clamp(Rectangle r)
@@ -148,74 +189,10 @@ namespace Loupe.UI
       return r;
     }
 
-    static GraphicsPath Rounded(Rectangle r, int radius)
-    {
-      var d = radius * 2;
-      var path = new GraphicsPath();
-      path.AddArc(r.Left, r.Top, d, d, 180, 90);
-      path.AddArc(r.Right - d, r.Top, d, d, 270, 90);
-      path.AddArc(r.Right - d, r.Bottom - d, d, d, 0, 90);
-      path.AddArc(r.Left, r.Bottom - d, d, d, 90, 90);
-      path.CloseFigure();
-      return path;
-    }
-
-    static void DrawLock(Graphics g, bool closed)
-    {
-      using (var pen = new Pen(Ink, 2f))
-      using (var ink = new SolidBrush(Ink))
-      {
-        var y = closed ? 4 : 1;
-        g.DrawArc(pen, 6, y, 8, 8, 180, 180);
-        g.DrawLine(pen, 6, y + 4, 6, 9);
-        g.DrawLine(pen, 14, y + 4, 14, closed ? 9 : y + 5);
-        g.FillRectangle(ink, 4, 9, 12, 8);
-      }
-    }
-
-    static void DrawHome(Graphics g)
-    {
-      using (var ink = new SolidBrush(Ink))
-      {
-        g.FillPolygon(ink, new[] { new Point(10, 3), new Point(17, 10), new Point(15, 10), new Point(15, 17), new Point(5, 17), new Point(5, 10), new Point(3, 10) });
-        g.FillRectangle(Brushes.WhiteSmoke, 9, 12, 3, 5);
-      }
-    }
-
     protected override void Dispose(bool disposing)
     {
-      if (disposing)
-      {
-        main.DocumentChanged -= OnDocumentChanged;
-        main.CanvasPostPaintOverlay -= OnMainPainted;
-        main.SizeChanged -= OnMainResized;
-        canvas.MouseUp -= OnLoupeMouseUp;
-        canvas.Document = null;
-      }
+      if (disposing) main.SizeChanged -= OnMainResized;
       base.Dispose(disposing);
-    }
-
-    class IconButton : Control
-    {
-      readonly Action<Graphics> glyph;
-
-      public IconButton(int size, Action<Graphics> glyph)
-      {
-        this.glyph = glyph;
-        Size = new Size(size, size);
-        DoubleBuffered = true;
-        Cursor = Cursors.Hand;
-      }
-
-      protected override void OnPaint(PaintEventArgs e)
-      {
-        var g = e.Graphics;
-        g.SmoothingMode = SmoothingMode.AntiAlias;
-        g.Clear(Color.FromArgb(240, 240, 240));
-        using (var edge = new Pen(Ink)) g.DrawRectangle(edge, 0, 0, Width - 1, Height - 1);
-        g.ScaleTransform(Width / 20f, Height / 20f);
-        glyph(g);
-      }
     }
   }
 }

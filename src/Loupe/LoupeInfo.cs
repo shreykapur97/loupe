@@ -6,7 +6,7 @@ namespace Loupe
 {
   public class LoupeInfo : GH_AssemblyInfo
   {
-    internal static readonly Bitmap Icon24 = new Bitmap(typeof(LoupeInfo).Assembly.GetManifestResourceStream("loupe_24.png"));
+    internal static readonly Bitmap Icon24 = Assets.Load("loupe_24");
 
     public override string Name => "Loupe";
     public override Bitmap Icon => Icon24;

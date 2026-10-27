@@ -13,6 +13,7 @@ Marked **decided**, **assumed** (Claude's default, confirm or change), or
 - Windows only for now. **Assumed** (`phases.md` → Open, Mac).
 - The second canvas is mainly for viewing and navigating. **Decided**
   (CLAUDE.md → Hard rules).
+- One Loupe at a time. **Decided** (ADR 0007).
 
 ## Behaviour
 
@@ -20,6 +21,9 @@ Marked **decided**, **assumed** (Claude's default, confirm or change), or
   other way round. **Decided.**
 - Selection, wires and solutions show the same in both canvases. **Decided.**
 - The panel follows the active document. **Decided.**
+- Loupe opens view only, so it can't change the definition by accident.
+  **Decided** (ADR 0007).
+- Nothing about Loupe is saved between sessions. **Decided** (ADR 0007).
 - No setting or file is written to the user's machine. **Assumed.**
 
 ## Performance

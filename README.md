@@ -29,12 +29,21 @@ To uninstall, delete `Loupe.gha` from that folder and restart Rhino.
 
 ## Use
 
-- Click the Loupe button on the canvas toolbar: the panel opens bottom-left.
-- Zoom and pan in it as on the main canvas; selection and wires are shared.
-- Lock (top-left): unlock to move the panel by its frame or resize it by a
-  corner; lock again to keep it there.
-- Home (top-left): back to the default size and place.
-- Click the toolbar button again to hide it; click to bring it back.
+Click the Loupe button on the canvas toolbar: Loupe opens bottom-left,
+showing exactly what the main canvas shows. Move around the main canvas;
+Loupe keeps its view. Click the toolbar button again to hide or show it.
+
+The buttons down Loupe's left edge, top to bottom:
+
+| Button | What it does |
+|---|---|
+| Lock | On: Loupe stays put. Off: drag the frame to move it, a corner to resize it. |
+| Home | Back on the canvas, default size, bottom-left. |
+| Float / dock | Pops Loupe out into its own window you can put anywhere, and back. |
+| View only | On: Loupe is frozen, no editing, no pan or zoom. Off: a normal canvas. |
+| Match view | Loupe jumps to the main canvas's current view. |
+
+Closing the Grasshopper editor hides Loupe.
 
 The second canvas is meant for viewing and navigating. Some editing (wire
 dragging, the search popup, widgets) may not work in it.
@@ -48,3 +57,6 @@ dragging, the search popup, widgets) may not work in it.
 [GPL-3.0](LICENSE). You can use, change and share Loupe; anything you
 distribute that's based on it must be shared under the same licence, with
 its source.
+
+Button icons: [Lucide](https://lucide.dev), ISC licence
+([`src/Loupe/Resources/Icons/LICENSE-lucide.txt`](src/Loupe/Resources/Icons/LICENSE-lucide.txt)).

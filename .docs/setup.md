@@ -44,7 +44,21 @@ Same table as CLAUDE.md → Commands.
 
 Every rebuild needs a Rhino restart.
 
-## 4. Releasing
+## 4. Icons
+
+The panel buttons are Lucide icons (ADR 0008), rendered to 48 px PNGs in
+`src/Loupe/Resources/Icons/`. To change or add one: add its name to the
+list in `tools/icons/render.js`, then, with Node and Playwright installed
+and the `lucide-static` package unpacked somewhere:
+
+```
+node tools/icons/render.js <lucide-static>/icons src/Loupe/Resources/Icons
+```
+
+Every PNG under `Resources/` is embedded automatically; load it with
+`Assets.Load("<name>")`.
+
+## 5. Releasing
 
 CI (`.github/workflows/build.yml`) builds the `.gha` on Windows on every
 push; the build is under the run's Artifacts. A tag starting with `v`
@@ -60,7 +74,7 @@ git push origin v0.1.0-alpha
 Or without a local tag: GitHub → Actions → build → Run workflow, with the
 tag filled in.
 
-## 5. Troubleshooting
+## 6. Troubleshooting
 
 | Symptom | Fix |
 |---|---|

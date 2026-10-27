@@ -35,8 +35,8 @@ checked in Rhino (a rebuild needs a Rhino restart).
 | 1 | Scaffold: template, layout, builds a `.gha` | `src/Loupe/` | plugin.md |
 | 2 | Loader: runs at load, waits for the editor | `src/Loupe/LoupeLoader.cs` | plugin.md |
 | 3 | Toolbar button appears | `src/Loupe/UI/ToolbarButton.cs` | plugin.md |
-| 4 | Panel with the second canvas, lock, home, toggle (ADR 0005) | `src/Loupe/UI/LoupePanel.cs` | plugin.md |
-| 5 | Sync and cleanup: refresh, follow the active document, detach | `src/Loupe/UI/LoupePanel.cs` | plugin.md |
+| 4 | Panel: frame, buttons, move / resize, float (ADR 0007) | `src/Loupe/UI/LoupePanel.cs`, `IconButton.cs`, `FloatingHost.cs` | plugin.md |
+| 5 | Second canvas: sync, view only, match view, cleanup | `src/Loupe/UI/LoupeCanvas.cs` | plugin.md |
 
 ## Commands
 
@@ -46,6 +46,7 @@ checked in Rhino (a rebuild needs a Rhino restart).
 | Build | repo root | `dotnet build` → `src/Loupe/bin/Debug/net7.0-windows/Loupe.gha` (Windows; Linux SDKs can't build `-windows` targets) |
 | Load in Rhino | Rhino | `GrasshopperDeveloperSettings` → add that folder, restart Rhino |
 | Debug | VS Code | Run → "Rhino 8" (starts Rhino) or "Attach to Rhino 8" |
+| Icons | repo root | `node tools/icons/render.js <lucide-static>/icons src/Loupe/Resources/Icons` (`setup.md` → Icons) |
 | Release | repo root | `git tag vX.Y.Z` + `git push origin vX.Y.Z` → CI attaches `Loupe.gha` to a GitHub Release (`-` in the tag → pre-release) |
 
 ## Hard rules

@@ -11,10 +11,14 @@ How Loupe hooks into Grasshopper. Plan and status: `phases.md` /
         └─ LoupeLoader (GH_AssemblyPriority)
              └─ RhinoApp.Idle until Instances.DocumentEditor exists
                   └─ ToolbarButton: find the canvas ToolStrip, add button
-                       └─ click ─▶ LoupePanel (over the main canvas, same parent)
-                                     ├─ lock, home
-                                     └─ GH_Canvas, Document = active document
-                                        own Viewport, no widgets
+                       └─ click ─▶ LoupePanel (over the main canvas, same parent,
+                                     │            or inside a FloatingHost)
+                                     ├─ IconButtons: lock, home, float,
+                                     │               view only, match view
+                                     └─ LoupeCanvas : GH_Canvas
+                                        Document = active document
+                                        own Viewport, no widgets, input
+                                        blocked when view only
 
  GH_Document (shared): objects, wires, selection, solutions
    ├─ main canvas (Instances.ActiveCanvas)
@@ -30,13 +34,15 @@ How Loupe hooks into Grasshopper. Plan and status: `phases.md` /
    changes, the lowest `ToolStrip` above the main canvas. Hidden when
    View → Canvas Toolbar is off.
 3. **Button:** a `ToolStripButton` with icon and tooltip on that strip.
-4. **Second canvas:** a new `GH_Canvas`, `Document` = active document,
-   inside `LoupePanel`, a framed control added next to the main canvas
-   and brought to the front (ADR 0005). Each canvas has its own
-   `Viewport`.
+4. **Second canvas:** `LoupeCanvas`, a `GH_Canvas` on the active
+   document, inside `LoupePanel`, a framed control added next to the main
+   canvas and brought to the front, or moved into a borderless
+   `FloatingHost` (ADR 0007). Each canvas has its own `Viewport`; Loupe
+   opens at the main canvas's zoom and centre.
 5. **Sync:** the document is shared; the Loupe canvas redraws whenever
    the main canvas paints, and follows `DocumentChanged` on the main canvas.
-6. **Clicks:** first opens, then hide / show (ADR 0005).
+6. **Clicks:** first opens, then hide / show; closing the editor hides it
+   (ADR 0007).
 7. **Cleanup:** on dispose, `Document = null` and unsubscribe everything.
 
 ## Known quirks
@@ -60,15 +66,23 @@ loupe/
 │                         case-study, status/, sessions/, adr/
 ├── .vscode/              launch.json, tasks.json
 ├── .github/workflows/    build.yml (optional CI)
+├── tools/icons/          render.js: Lucide SVG → PNG (Node + Playwright)
 ├── docs/images/          screenshots for the README
 └── src/Loupe/
     ├── Loupe.csproj
     ├── LoupeInfo.cs      GH_AssemblyInfo
     ├── LoupeLoader.cs    GH_AssemblyPriority entry point
+    ├── Assets.cs         embedded PNGs by name
     ├── UI/
     │   ├── ToolbarButton.cs   the only file touching editor internals
-    │   └── LoupePanel.cs      framed panel + second GH_Canvas, lock, home
-    └── Resources/loupe_24.png
+    │   ├── LoupePanel.cs      frame, buttons, move / resize, dock / float
+    │   ├── LoupeCanvas.cs     second GH_Canvas: sync, view only, match view
+    │   ├── IconButton.cs      two-state icon button
+    │   ├── FloatingHost.cs    borderless window for floating
+    │   └── Style.cs           colours, rounded path
+    └── Resources/
+        ├── loupe_24.png       plugin icon (ADR 0006)
+        └── Icons/             Lucide PNGs + licence (ADR 0008)
 ```
 
 `docs/images/` comes with the first screenshots.

@@ -14,7 +14,8 @@ namespace Loupe.UI
     public static void Add(GH_DocumentEditor editor)
     {
       var strip = FindCanvasToolbar(editor);
-      if (strip == null)
+      var main = Descendants(editor).OfType<GH_Canvas>().FirstOrDefault();
+      if (strip == null || main == null)
       {
         RhinoApp.WriteLine("Loupe: canvas toolbar not found, button not added.");
         return;
@@ -24,29 +25,27 @@ namespace Loupe.UI
         DisplayStyle = ToolStripItemDisplayStyle.Image,
         ToolTipText = "Loupe: show or hide a second canvas",
       };
-      button.Click += (s, e) => Toggle(editor, button);
+      button.Click += (s, e) => button.Checked = Toggle(main);
+      editor.VisibleChanged += (s, e) =>
+      {
+        if (editor.Visible || panel == null || panel.IsDisposed) return;
+        panel.Shown = false;
+        button.Checked = false;
+      };
       strip.Items.Add(button);
       RhinoApp.WriteLine("Loupe: button added to the canvas toolbar.");
     }
 
-    static void Toggle(GH_DocumentEditor editor, ToolStripButton button)
+    static bool Toggle(GH_Canvas main)
     {
-      if (panel == null || panel.IsDisposed)
-      {
-        var main = MainCanvas(editor);
-        panel = new LoupePanel(main);
-        panel.VisibleChanged += (s, e) => button.Checked = panel.Visible;
-        main.Parent.Controls.Add(panel);
-        panel.Home();
-        panel.BringToFront();
-        button.Checked = true;
-        return;
-      }
-      panel.Visible = !panel.Visible;
-      if (panel.Visible) panel.BringToFront();
+      if (panel != null && !panel.IsDisposed) return panel.Shown = !panel.Shown;
+      panel = new LoupePanel(main);
+      main.Parent.Controls.Add(panel);
+      panel.Home();
+      panel.BringToFront();
+      panel.MatchView();
+      return true;
     }
-
-    static GH_Canvas MainCanvas(Control editor) => Descendants(editor).OfType<GH_Canvas>().First();
 
     static ToolStrip FindCanvasToolbar(Control editor) =>
       Descendants(editor).OfType<ToolStrip>().FirstOrDefault(t => t.Name == "CanvasToolbar") ?? ToolbarAboveCanvas(editor);

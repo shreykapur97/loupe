@@ -16,7 +16,8 @@
 
   <ItemGroup>
     <PackageReference Include="Grasshopper" Version="8.0.23304.9001" ExcludeAssets="runtime" />
-    <EmbeddedResource Include="Resources\loupe_24.png" LogicalName="loupe_24.png" />
+    <EmbeddedResource Include="Resources\**\*.png" LogicalName="%(Filename).png" />
+    <EmbeddedResource Include="Resources\Icons\LICENSE-lucide.txt" LogicalName="LICENSE-lucide.txt" />
   </ItemGroup>
 
 </Project>
