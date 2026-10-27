@@ -60,6 +60,9 @@ Every PNG under `Resources/` is embedded automatically; load it with
 
 ## 5. Releasing
 
+Before a release: add its entry to `CHANGELOG.md` and set `<Version>` in
+`src/Loupe/Loupe.csproj`.
+
 CI (`.github/workflows/build.yml`) builds the `.gha` on Windows on every
 push; the build is under the run's Artifacts. A tag starting with `v`
 also makes a GitHub Release with `Loupe.gha` attached, which is what users
@@ -76,9 +79,9 @@ tag filled in.
 
 ## 6. Troubleshooting
 
+User-side problems (no button, can't move it…): README → Troubleshooting.
+
 | Symptom | Fix |
 |---|---|
 | Rhino says the `.gha` is blocked | Right-click → Properties → Unblock (downloaded files only) |
 | Build fails: file in use | Close Rhino; it locks the loaded `.gha` |
-| No Loupe button | Grasshopper: View → Canvas Toolbar must be on. Rhino command history: "Loupe: button added…" means it loaded; "canvas toolbar not found" means `ToolbarButton.cs` didn't find the strip; neither means the plugin didn't load |
-| Plugin not loaded | Rhino 8 must run on .NET Core (default), not `/netfx` (ADR 0001) |
