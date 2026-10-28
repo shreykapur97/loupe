@@ -2,6 +2,15 @@
 
 Downloads: [Releases](https://github.com/shreykapur97/loupe/releases).
 
+## 0.5.0-alpha — 2026-10-28
+
+- View only now lets you look around: right or middle drag pans, the wheel
+  zooms at the cursor. Editing is still blocked.
+- Switching files: Loupe goes back to where it was looking in each file.
+- Pinned Loupe can be moved and resized on the canvas.
+- Loupe remembers its place, size, pin and view only after Rhino restarts.
+  Home resets it.
+
 ## 0.4.0-alpha — 2026-10-27
 
 - Lock and float / dock merged into one **pin** button: pinned, Loupe is

@@ -41,7 +41,7 @@ namespace Loupe.UI
       if (panel != null && !panel.IsDisposed) return panel.Shown = !panel.Shown;
       panel = new LoupePanel(main);
       main.Parent.Controls.Add(panel);
-      panel.Home();
+      panel.Restore();
       panel.BringToFront();
       panel.MatchView();
       return true;

@@ -22,6 +22,7 @@ paths:
   redraws with the main canvas, view only, match view.
 - `UI/IconButton.cs` — a square button showing one of two icons.
 - `UI/FloatingHost.cs` — the borderless window used when floating.
+- `UI/PanelLayout.cs` — saves and loads the panel's layout as JSON.
 - `UI/Style.cs` — colours and the rounded-rectangle path.
 - `Resources/` — `loupe_24.png`, `Icons/*.png` (Lucide, ADR 0008); every
   PNG is embedded under its file name.
@@ -38,9 +39,12 @@ paths:
   show. No X.
 - Buttons top-down: pin, home, view only, match view. Pin and view only
   start on.
-- Pinned: a sibling of the main canvas, over it, always inside its bounds,
-  can't be moved. Unpinned: the same panel inside a `FloatingHost` owned
-  by the editor; only then can it be moved and resized.
+- Pinned: a sibling of the main canvas, over it, always inside its bounds.
+  Unpinned: the same panel inside a `FloatingHost` owned by the editor.
+  Both move by the frame and resize by a corner.
+- Layout (pinned place relative to the canvas's bottom-left, floating
+  window, pin, view only) is saved by `UI/PanelLayout.cs` after every
+  change and restored on the first click.
 - Sizes go through `S()` so they scale with the display.
 - Icons come from `Resources/Icons` (Lucide); no glyphs drawn in code.
 
@@ -50,6 +54,10 @@ paths:
   view only is on; Grasshopper wires its handlers to those events, so they
   never run. Mouse enter / leave are blocked too, so a frozen Loupe never
   takes focus from the main canvas.
+- In view only, Loupe pans (right / middle drag) and zooms at the cursor
+  (wheel) itself by moving `Viewport`; Grasshopper's own handlers stay off.
+- Each document's last Loupe view is kept in a `ConditionalWeakTable`, so
+  closed documents don't leak.
 - Match view copies `Viewport.Zoom`, then `Viewport.MidPoint`, with
   `ComputeProjection()` after each.
 

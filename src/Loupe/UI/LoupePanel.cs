@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 using Grasshopper.GUI.Canvas;
 
@@ -13,6 +14,7 @@ namespace Loupe.UI
     readonly LoupeCanvas canvas;
     readonly IconButton pinButton, viewButton;
     readonly float scale;
+    readonly PanelLayout layout = PanelLayout.Load();
     FloatingHost host;
     Rectangle pinnedBounds;
     int grip;
@@ -28,7 +30,11 @@ namespace Loupe.UI
       Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
       pinButton = AddButton(0, "pin", "pin-off", TogglePinned);
       AddButton(1, "house", null, Home);
-      viewButton = AddButton(2, "eye", "pencil", () => canvas.ViewOnly = viewButton.Active = !viewButton.Active);
+      viewButton = AddButton(2, "eye", "pencil", () =>
+      {
+        canvas.ViewOnly = viewButton.Active = !viewButton.Active;
+        Save();
+      });
       AddButton(3, "scan", null, MatchView);
       Controls.Add(canvas);
       main.SizeChanged += OnMainResized;
@@ -56,6 +62,34 @@ namespace Loupe.UI
     {
       if (Floating) TogglePinned();
       Bounds = Clamp(new Rectangle(main.Left + S(16), main.Bottom - S(376), S(480), S(360)));
+      Save();
+    }
+
+    public void Restore()
+    {
+      if (!(PanelLayout.To(layout.Pinned) is Rectangle p))
+      {
+        Home();
+        return;
+      }
+      Bounds = Clamp(new Rectangle(main.Left + p.X, main.Bottom - p.Y, p.Width, p.Height));
+      canvas.ViewOnly = viewButton.Active = layout.ViewOnly;
+      if (layout.Floating && PanelLayout.To(layout.Window) is Rectangle w && Screen.AllScreens.Any(s => s.WorkingArea.IntersectsWith(w)))
+      {
+        TogglePinned();
+        host.Bounds = w;
+        Save();
+      }
+    }
+
+    void Save()
+    {
+      var p = Floating ? pinnedBounds : Bounds;
+      layout.Pinned = PanelLayout.From(new Rectangle(p.X - main.Left, main.Bottom - p.Y, p.Width, p.Height));
+      if (Floating) layout.Window = PanelLayout.From(host.Bounds);
+      layout.Floating = Floating;
+      layout.ViewOnly = canvas.ViewOnly;
+      layout.Save();
     }
 
     IconButton AddButton(int row, string on, string off, Action click)
@@ -91,6 +125,7 @@ namespace Loupe.UI
         host.Show(main.FindForm());
       }
       pinButton.Active = !Floating;
+      Save();
     }
 
     void OnMainResized(object sender, EventArgs e)
@@ -126,7 +161,6 @@ namespace Loupe.UI
 
     int HitTest(Point p)
     {
-      if (!Floating) return 0;
       int c = S(20);
       bool l = p.X < c, r = p.X > Width - c, t = p.Y < c, b = p.Y > Height - c;
       return (l || r) && (t || b) ? (l ? 1 : 0) | (r ? 2 : 0) | (t ? 4 : 0) | (b ? 8 : 0) : MoveGrip;
@@ -158,6 +192,7 @@ namespace Loupe.UI
 
     protected override void OnMouseUp(MouseEventArgs e)
     {
+      if (grip != 0) Save();
       grip = 0;
       base.OnMouseUp(e);
     }

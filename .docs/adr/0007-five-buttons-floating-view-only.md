@@ -3,6 +3,9 @@
 Date: 2026-10-27 · Status: accepted · Decided by: shrey
 Updated 2026-10-27: lock and float merged into pin ("the lock button and
 the popout can be merged").
+Updated 2026-10-28: pinned Loupe can be moved and resized inside the
+canvas; view only allows pan (right / middle drag) and zoom (wheel); Loupe
+remembers its view per document and its layout between sessions.
 
 ## Supersedes
 
@@ -24,30 +27,36 @@ the borders" as clean as Grasshopper's panel component.
   the panel component. Same frame docked and floating; floating adds a
   drop shadow. No title bar, no X.
 - **Buttons**, stacked down the left edge, over the canvas:
-  1. **Pin** (default on): pinned, Loupe sits on the canvas, fixed.
-     Unpinned, it floats in its own borderless window (above the editor,
-     anywhere on screen, not in the taskbar) that can be dragged by the
-     frame and resized by a corner. Pinning again docks it where the
+  1. **Pin** (default on): pinned, Loupe sits on the canvas, and can be
+     dragged by the frame and resized by a corner, always inside the
+     canvas. Unpinned, it floats in its own borderless window (above the
+     editor, anywhere on screen, not in the taskbar), moved and resized the
+     same way. Pinning again docks it where the
      window is if that overlaps the main canvas (pushed inside it),
      otherwise where it was last pinned.
   2. **Home:** pins Loupe, default size (480 × 360 at 100% scaling),
      bottom-left.
-  3. **View only** (default on): no editing and no navigation — clicks,
-     wheel, keys and drops are ignored. Off: a normal canvas.
+  3. **View only** (default on): no editing — clicks, keys and drops are
+     ignored — but right / middle drag pans and the wheel zooms at the
+     cursor. Off: a normal canvas.
   4. **Match view:** Loupe takes the main canvas's zoom and centre.
 - **Opening:** the first click shows it docked, bottom-left, at the main
   canvas's current view (same zoom, same centre). Later clicks hide / show.
 - **Closing the Grasshopper editor** hides Loupe, docked or floating.
-- **One Loupe.** Nothing is remembered between sessions.
+- **Switching documents:** Loupe returns to where it was looking in that
+  document; a document it hasn't shown yet opens at the main canvas's view.
+- **One Loupe.** Its place, size, pin and view only are remembered between
+  sessions (`%APPDATA%\Grasshopper\Loupe.json`); the first click restores
+  them, a floating window only if it's still on a screen. Home resets.
 - No compass or Markov bar in Loupe.
 
 ## Consequences
 
-- A frozen Loupe only moves by match view; to look around inside it, turn
-  view only off.
+- View only Loupe can be looked around in without risking edits; Loupe
+  does its own pan and zoom there, since Grasshopper's are tied to its
+  mouse handlers.
 - Pinned, Loupe can't leave the editor; unpinned, it can go anywhere,
-  including another monitor. Rearranging it on the canvas means unpin,
-  place, pin.
-- A floating Loupe can't be locked in place.
+  including another monitor.
+- Neither pinned nor floating Loupe can be locked in place.
 - Rounded corners are slightly jagged (WinForms region clipping); the
   floating shadow may follow the window's rectangle, not its corners.
